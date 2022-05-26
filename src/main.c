@@ -1,5 +1,3 @@
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "init.h"
@@ -9,17 +7,16 @@ void error_callback(int error, const char* description);
 int main() {
     printf("Program beginning\n");
     GLFWwindow* window = NULL;
-
     glfwSetErrorCallback(error_callback);
-    int code = init_glfw();
-    if (code == 1)
-        return EXIT_FAILURE;
-    window = init_glfw_window();
-    if (window == NULL)
-        return EXIT_FAILURE;
-    glfwMakeContextCurrent(window);
-    code = init_glad();
-    if (code == 1)
+
+    int errCount = 0;
+
+    // initialization code
+    init_glfw(&errCount);
+    window = init_glfw_window(&errCount);
+    init_glad(&errCount);
+
+    if (errCount > 0)
         return EXIT_FAILURE;
 
     printf("Passed initialization stage %p\n", window);
